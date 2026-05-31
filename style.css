@@ -46,6 +46,9 @@
     radial-gradient(600px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(193, 255, 18, 0.05), transparent 50%),
     var(--color-card-bg);
   position: relative;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 .skills-card:hover, .project-card:hover, .timeline-card:hover, .contact-form:focus-within {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(193, 255, 18, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.08);
@@ -246,6 +249,9 @@ p {
   height: 100vh;
   z-index: 1; /* Behind grid-overlay (2) and body container (5) */
   pointer-events: none;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .grid-overlay {

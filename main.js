@@ -689,17 +689,14 @@ function initThreeBg() {
   starfield = new THREE.Points(starGeometry, starMaterial);
   scene.add(starfield);
 
-  // 5. Materials for 3D Geometries (Pop out, highly visible Web3 glassmorphism & chrome!)
-  heroMaterial = new THREE.MeshPhysicalMaterial({
+  // 5. Materials for 3D Geometries (Tối ưu hóa cực cao sang MeshStandardMaterial)
+  heroMaterial = new THREE.MeshStandardMaterial({
     color: 0x0c0c10,
-    roughness: 0.08,
-    metalness: 0.15,
-    transmission: 0.72, // Glass transparency
-    ior: 1.5, // Index of refraction
-    thickness: 22,
+    roughness: 0.1,
+    metalness: 0.8, // Tạo độ bóng cao
     transparent: true,
-    opacity: 0.55,
-    flatShading: true // Crystalline faceted faces
+    opacity: 0.65,
+    flatShading: true // Tinh thể pha lê sắc cạnh
   });
   
   ring1Material = new THREE.MeshBasicMaterial({
@@ -729,23 +726,19 @@ function initThreeBg() {
     opacity: 0
   });
   
-  projectsMaterial = new THREE.MeshPhysicalMaterial({
+  projectsMaterial = new THREE.MeshStandardMaterial({
     color: 0x030308,
-    metalness: 0.95, // Liquid chrome reflection
-    roughness: 0.05,
-    clearcoat: 1.0,
-    clearcoatRoughness: 0.02,
+    metalness: 0.95, // Phản chiếu kim loại lỏng (Chrome)
+    roughness: 0.1,
     transparent: true,
     opacity: 0,
     flatShading: true
   });
   
-  contactMaterial = new THREE.MeshPhysicalMaterial({
+  contactMaterial = new THREE.MeshStandardMaterial({
     color: 0x121218,
-    transmission: 0.90, // Diamond refraction glass
-    ior: 2.4,
-    thickness: 30,
-    roughness: 0.05,
+    metalness: 0.2,
+    roughness: 0.1,
     transparent: true,
     opacity: 0,
     flatShading: true
