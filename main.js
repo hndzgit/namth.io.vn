@@ -439,6 +439,8 @@ let aboutMaterial, projectsMaterial, contactMaterial;
 let lightLime, lightMagenta, lightCyan;
 
 let scrollPercent = 0;
+let docHeight = 0;
+let sectionPositions = [];
 let targetCamX = 0;
 let targetCamY = 0;
 
@@ -874,7 +876,6 @@ function onWebglResize() {
 }
 
 function onWebglScroll() {
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   if (docHeight > 0) {
     scrollPercent = window.scrollY / docHeight;
   }
@@ -1174,24 +1175,50 @@ translatePage(currentLanguage);
 
 
 /* -------------------------------------------------------------
-   ACTIVE NAVBAR ITEM TRACKING ON SCROLL
+   ACTIVE NAVBAR ITEM TRACKING ON SCROLL (Throttled & Cached)
 ------------------------------------------------------------- */
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.nav-link');
 const scrollDownIndicator = document.querySelector('.scroll-down-indicator');
 
+// Cache offset top & heights to prevent layout thrashing (Forced Reflow) on scroll
+function cacheSectionPositions() {
+  docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  sectionPositions = Array.from(sections).map(sec => {
+    const topVal = sec.offsetTop;
+    const heightVal = sec.offsetHeight;
+    return {
+      id: sec.getAttribute('id'),
+      top: topVal - 150,
+      bottom: topVal - 150 + heightVal
+    };
+  });
+}
+
+// Build initial cache and bind refresh hooks
+window.addEventListener('DOMContentLoaded', cacheSectionPositions);
+window.addEventListener('load', cacheSectionPositions);
+window.addEventListener('resize', cacheSectionPositions);
+
+// Recalculate if page dynamically changes size (e.g. accordion expansions)
+const heightMutationObserver = new MutationObserver(cacheSectionPositions);
+heightMutationObserver.observe(document.body, { childList: true, subtree: true });
+
+// Run initial cache compile immediately
+cacheSectionPositions();
+
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
   let currentActive = 'hero';
   
-  // Track active section for navigation
-  sections.forEach(sec => {
-    const top = sec.offsetTop - 150; // offset factor
-    const height = sec.offsetHeight;
-    if (scrollY >= top && scrollY < top + height) {
-      currentActive = sec.getAttribute('id');
+  // High-performance numerical search in RAM (0% DOM Queries!)
+  for (let i = 0; i < sectionPositions.length; i++) {
+    const pos = sectionPositions[i];
+    if (scrollY >= pos.top && scrollY < pos.bottom) {
+      currentActive = pos.id;
+      break;
     }
-  });
+  }
 
   navLinks.forEach(link => {
     link.classList.remove('active');
@@ -1209,7 +1236,7 @@ window.addEventListener('scroll', () => {
     }
     
     // Fade out scroll indicator near the footer to prevent layout clash
-    const footerThreshold = document.documentElement.scrollHeight - window.innerHeight - 140;
+    const footerThreshold = docHeight - 140;
     if (scrollY >= footerThreshold) {
       scrollDownIndicator.classList.add('hidden');
     }
