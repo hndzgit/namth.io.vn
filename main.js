@@ -50,7 +50,7 @@ document.addEventListener('visibilitychange', () => {
 /* -------------------------------------------------------------
    GEMINI API KEY CONFIGURATION
 ------------------------------------------------------------- */
-const GEMINI_API_KEY = "AQ.Ab8RN6KHDeFwqw59SHV3YCCbWTDeVQ4j6AAsjS5DIW9qG-566A"; // Paste your official Gemini API key here to unlock live AI chatbot capabilities
+const GEMINI_API_KEY = "AIzaSyAI7m_vxSo92BEvJZz8gEyd59Y22aTh8I4"; // Paste your official Gemini API key here to unlock live AI chatbot capabilities
 
 // Apply stored theme immediately on parse to avoid layout flash
 if (currentTheme === 'light') {
