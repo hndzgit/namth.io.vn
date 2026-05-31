@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nam Hoai — AI Engineer & Full-Stack Developer</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' fill='none'%3E%3Cstyle%3Epath, circle.inner %7B stroke: %23ffffff; %7D @media (prefers-color-scheme: light) %7B path, circle.inner %7B stroke: %23030305; %7D %7D%3C/style%3E%3Cdefs%3E%3ClinearGradient id='favicon-grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f76cfe'/%3E%3Cstop offset='100%25' stop-color='%23c1ff12'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='42' stroke='url(%23favicon-grad)' stroke-width='6'/%3E%3Ccircle class='inner' cx='50' cy='50' r='35' stroke-width='2' stroke-dasharray='6,3' opacity='0.6'/%3E%3Cpath d='M35 30 V70 M65 30 V70 M35 30 L65 70 M35 50 H65' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Explore the professional portfolio of Nam Hoai. Clean user interfaces, full-stack application development, and robust database operations.">
+  <meta name="keywords" content="Nam Hoai, Full-Stack Developer, AI Engineer, Portfolio, Angular, .NET, Java, Oracle, SQL Server">
+  <meta name="author" content="Nam Hoai">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Nam Hoai — Creative Developer & Tech Designer">
+  <meta property="og:description" content="Immersive, highly interactive creative developer portfolio featuring modern design principles.">
+  <meta property="og:image" content="https://www.hatom.com/images/favicon/favicon.png"> <!-- Fallback placeholder -->
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Nam Hoai — Creative Developer & Tech Designer">
+  <meta property="twitter:description" content="Immersive creative developer portfolio.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="style.css?v=20">
+</head>
+<body class="bg--black">
+
+  <!-- Fixed Interactive 3D WebGL Background Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor">
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+  </div>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader">
+    <canvas id="preloader-matrix-canvas"></canvas>
+    <div class="preloader-scanline"></div>
+    <div class="preloader-corner preloader-corner-tl space-mono">SYS_PREBOOT_V3.8 // PORTAL_ACTIVE</div>
+    <div class="preloader-corner preloader-corner-tr space-mono">ENV_MODE // PRODUCTION // SECURE</div>
+    <div class="preloader-corner preloader-corner-bl space-mono">GL_RENDERER // THREE.WEBGL_SHADERS</div>
+    <div class="preloader-corner preloader-corner-br space-mono">SECURE_GATEWAY_CONN // SYNC_SUCCESS</div>
+    <div class="preloader-grid"></div>
+    <div class="preloader-content">
+      <!-- Minimalist Brand Logo -->
+      <div class="preloader-logo-wrapper">
+        <svg class="logo-svg preloader-logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle class="logo-outer-circle" cx="50" cy="50" r="42" stroke="url(#preloader-logo-grad)" stroke-width="3" />
+          <circle class="logo-inner-circle" cx="50" cy="50" r="35" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.6" />
+          <path class="logo-glyph" d="M35 30 V70 M65 30 V70 M35 30 L65 70 M35 50 H65" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+          <defs>
+            <linearGradient id="preloader-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#f76cfe" />
+              <stop offset="100%" stop-color="#c1ff12" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+      <div class="preloader-middle">
+        <div class="preloader-status space-mono" id="preloader-status">ESTABLISHING SECURE GATEWAY...</div>
+        <div class="preloader-bar-outer">
+          <div class="preloader-bar-inner" id="preloader-bar"></div>
+        </div>
+      </div>
+      <div class="preloader-interactive">
+        <button id="enter-btn" class="enter-btn btn-hidden" data-en="ENTER PORTFOLIO" data-vi="VÀO TRANG WEB">ENTER PORTFOLIO</button>
+        <span class="enter-sub" id="enter-sub" data-en="namth.io.vn • Click to enter experience" data-vi="namth.io.vn • Nhấp để bắt đầu trải nghiệm">namth.io.vn • Click to enter experience</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Background Glow Blobs -->
+  <div class="glow-blob glow-blob-1"></div>
+  <div class="glow-blob glow-blob-2"></div>
+  <div class="glow-blob glow-blob-3"></div>
+
+  <!-- Cyber Grid Background Overlay -->
+  <div class="grid-overlay"></div>
+  <div class="scanlines"></div>
+
+  <!-- Navigation Header -->
+  <header class="header">
+    <a href="#" class="logo hover-target" aria-label="Home">
+      <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle class="logo-outer-circle" cx="50" cy="50" r="42" stroke="url(#header-logo-grad)" stroke-width="3" />
+        <circle class="logo-inner-circle" cx="50" cy="50" r="35" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.6" />
+        <path class="logo-glyph" d="M35 30 V70 M65 30 V70 M35 30 L65 70 M35 50 H65" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+        <defs>
+          <linearGradient id="header-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f76cfe" />
+            <stop offset="100%" stop-color="#c1ff12" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </a>
+    
+    <nav class="nav">
+      <ul class="nav-list">
+        <li><a href="#hero" class="nav-link hover-target active" data-en="HOME" data-vi="TRANG CHỦ">HOME</a></li>
+        <li><a href="#about" class="nav-link hover-target" data-en="ABOUT" data-vi="GIỚI THIỆU">ABOUT</a></li>
+        <li><a href="#projects" class="nav-link hover-target" data-en="PROJECTS" data-vi="DỰ ÁN">PROJECTS</a></li>
+        <li><a href="#experience" class="nav-link hover-target" data-en="EXPERIENCE" data-vi="KINH NGHIỆM">EXPERIENCE</a></li>
+        <li><a href="#contact" class="nav-link hover-target" data-en="CONTACT" data-vi="LIÊN HỆ">CONTACT</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-controls">
+      <!-- Theme Toggle Button -->
+      <button id="theme-toggle" class="theme-btn hover-target" aria-label="Toggle Theme">
+        <svg class="theme-icon sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="theme-icon moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      
+      <!-- Language Selector Toggle -->
+      <button id="lang-toggle" class="lang-btn hover-target" aria-label="Toggle Language">
+        <span class="lang-active">EN</span><span class="lang-divider">/</span><span class="lang-inactive">VI</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Scroll Down Indicator -->
+  <div class="scroll-down-indicator">
+    <div class="scroll-line"></div>
+    <span data-en="SCROLL DOWN" data-vi="CUỘN XUỐNG">SCROLL DOWN</span>
+  </div>
+
+  <!-- Main Scrollable Experience -->
+  <main class="container">
+
+    <!-- Section 1: Hero -->
+    <section id="hero" class="section hero-section">
+      <div class="hero-bg-container">
+        <!-- Unified 3D WebGL Canvas renders the interactive particle sphere here -->
+      </div>
+      
+      <div class="hero-content">
+        <div class="hero-meta space-mono reveal-fade-up" data-en="AI ENGINEER & FULL-STACK DEVELOPER" data-vi="KỸ SƯ AI & LẬP TRÌNH VIÊN FULL-STACK">AI ENGINEER & FULL-STACK DEVELOPER</div>
+        <h1 class="hero-title">
+          <span class="hero-title-line"><span class="reveal-clip">NAM</span></span>
+          <span class="hero-title-line accent-lime"><span class="reveal-clip">HOAI</span></span>
+        </h1>
+        <div class="hero-divider-line"></div>
+        <p class="hero-desc reveal-fade-up" data-en="Architecting immersive digital environments, robust software interfaces, and high-performance visual solutions inspired by future-proof Web3 technologies." data-vi="Kiến tạo môi trường kỹ thuật số nhập vai, giao diện phần mềm mạnh mẽ và các giải pháp hình ảnh hiệu năng cao lấy cảm hứng từ công nghệ Web3 tương lai.">
+          Architecting immersive digital environments, robust software interfaces, and high-performance visual solutions inspired by future-proof Web3 technologies.
+        </p>
+        
+        <div class="hero-actions reveal-fade-up">
+          <a href="#projects" class="btn btn-primary hover-target" data-en="LAUNCH ECOSYSTEM" data-vi="KHÁM PHÁ DỰ ÁN">LAUNCH ECOSYSTEM</a>
+          <a href="#about" class="btn btn-secondary hover-target" data-en="READ PROFILE" data-vi="XEM HỒ SƠ">READ PROFILE</a>
+        </div>
+      </div>
+      
+      <div class="hero-stats space-mono reveal-fade-up">
+        <div class="stat-box">
+          <span class="stat-num glow-lime">04+</span>
+          <span class="stat-lbl" data-en="YEARS IN TECH" data-vi="NĂM VỚI CÔNG NGHỆ">YEARS IN TECH</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num glow-magenta">15+</span>
+          <span class="stat-lbl" data-en="PROJECTS COMPLETED" data-vi="DỰ ÁN HOÀN THÀNH">PROJECTS COMPLETED</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num glow-cyan">ACTIVE</span>
+          <span class="stat-lbl" data-en="ENTERPRISE DEVELOPER" data-vi="LẬP TRÌNH VIÊN DOANH NGHIỆP">ENTERPRISE DEVELOPER</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: About -->
+    <section id="about" class="section about-section">
+      <div class="section-header">
+        <div class="section-title-wrapper">
+          <span class="section-hud-label space-mono glow-lime">[ 01 // PROFILE.SYS ]</span>
+          <h2 class="section-title"><span class="reveal-clip" data-en="THE PROFILE" data-vi="HỒ SƠ BẢN THÂN">THE PROFILE</span></h2>
+        </div>
+        <div class="section-header-line"></div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-left reveal-fade-up">
+          <h3 class="about-heading" data-en="An AI-driven mind combining academic research with industrial execution." data-vi="Tư duy hướng AI kết hợp nghiên cứu học thuật với thực thi thực tiễn.">An AI-driven mind combining academic research with industrial execution.</h3>
+          <p class="about-text" data-en="As a developer specializing in Artificial Intelligence, I view technology not just as static code, but as a medium for cognitive automation. Combining high school AI research roots (2022-2025) with current university studies and hands-on enterprise development, I bridge the gap between complex deep learning models and reliable software architectures. I design solutions that adapt, think, and perform at scale." data-vi="Là một lập trình viên chuyên về Trí tuệ Nhân tạo, tôi nhìn nhận công nghệ không chỉ là những dòng mã tĩnh, mà là công cụ tự động hóa nhận thức. Kết hợp nền tảng tự học AI từ thời học sinh (2022-2025) cùng chương trình đại học hiện tại và thực tế doanh nghiệp, tôi kết nối khoảng cách giữa các mô hình học sâu phức tạp và kiến trúc phần mềm tin cậy. Tôi thiết kế các giải pháp có khả năng thích ứng, tư duy và vận hành ở quy mô lớn.">
+            As a developer specializing in Artificial Intelligence, I view technology not just as static code, but as a medium for cognitive automation. Combining high school AI research roots (2022-2025) with current university studies and hands-on enterprise development, I bridge the gap between complex deep learning models and reliable software architectures. I design solutions that adapt, think, and perform at scale.
+          </p>
+        </div>
+
+        <div class="about-right reveal-fade-up">
+          <!-- Core Professional Credentials Card -->
+          <div class="skills-card system-diag-card reveal-fade-up">
+            <h4 class="skills-title space-mono" data-en="PROFESSIONAL STATUS" data-vi="THÔNG TIN CHUYÊN MÔN">PROFESSIONAL STATUS</h4>
+            <div class="skills-grid space-mono" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;">
+              <div class="diag-item" style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                <span class="tech-label" data-en="ROLE:" data-vi="VAI TRÒ:">ROLE:</span>
+                <span class="tech-val glow-lime" data-en="AI Engineer & Full-Stack Developer" data-vi="Kỹ sư AI & Lập trình viên Full-Stack">AI Engineer & Full-Stack Developer</span>
+              </div>
+              <div class="diag-item" style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                <span class="tech-label" data-en="LOCATION:" data-vi="VỊ TRÍ:">LOCATION:</span>
+                <span class="tech-val" data-en="Hanoi, Vietnam" data-vi="Hà Nội, Việt Nam">Hanoi, Vietnam</span>
+              </div>
+              <div class="diag-item" style="display: flex; justify-content: space-between; padding-bottom: 0.5rem;">
+                <span class="tech-label" data-en="EXPERTISE:" data-vi="CHUYÊN MÔN:">EXPERTISE:</span>
+                <span class="tech-val glow-cyan" data-en="Artificial Intelligence" data-vi="Trí tuệ Nhân tạo">Artificial Intelligence</span>
+              </div>
+              <div class="diag-item" style="display: flex; justify-content: space-between; padding-bottom: 0.2rem;">
+                <span class="tech-label" data-en="AVAILABILITY:" data-vi="TRẠNG THÁI:">AVAILABILITY:</span>
+                <span class="tech-val glow-lime" data-en="Open for Projects" data-vi="Sẵn sàng nhận dự án">Open for Projects</span>
+              </div>
+            </div>
+            <div class="skills-extra space-mono">
+              <div class="extra-title" data-en="CORE PHILOSOPHY" data-vi="TRIẾT LÝ CỐT LÕI">CORE PHILOSOPHY</div>
+              <div class="extra-detail" data-en="Building resilient, secure, and scalable solutions that drive digital excellence." data-vi="Xây dựng giải pháp phần mềm bền bỉ, bảo mật và khả năng mở rộng vượt trội.">Building resilient, secure, and scalable solutions that drive digital excellence.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skills Cards 3-Column Grid -->
+      <div class="about-skills-grid">
+        <!-- Card 1: App Engineering -->
+        <div class="skills-card reveal-fade-up">
+          <div class="skills-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 0.75rem;">
+            <h4 class="skills-title space-mono" data-en="APPLICATION ENG" data-vi="LẬP TRÌNH ỨNG DỤNG" style="margin-bottom: 0;">APPLICATION ENG</h4>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">BACKEND DEVELOPMENT</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">C#.NET Core</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Java</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">RESTful APIs</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">FRONTEND CLIENT</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Angular SSR</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Bootstrap</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">TailwindCSS</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">VERSION CONTROL</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Git & GitHub Flow</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Data & DevOps -->
+        <div class="skills-card reveal-fade-up">
+          <div class="skills-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 0.75rem;">
+            <h4 class="skills-title space-mono" data-en="DATA & DEVOPS" data-vi="DỮ LIỆU & DEVOPS" style="margin-bottom: 0;">DATA & DEVOPS</h4>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">DATABASE ENGINES</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Oracle Database</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">SQL Server</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">NoSQL Database</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Redis Cache</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Elasticsearch</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">DEVOPS AUTOMATION</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Docker</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Kubernetes</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">CI/CD Pipelines</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">OPTIMIZATION</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Redis Caching</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Load Balancing</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Database Tuning</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Systems & AI -->
+        <div class="skills-card reveal-fade-up">
+          <div class="skills-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 0.75rem;">
+            <h4 class="skills-title space-mono" data-en="ARTIFICIAL INTELLIGENCE" data-vi="TRÍ TUỆ NHÂN TẠO" style="margin-bottom: 0;">ARTIFICIAL INTELLIGENCE</h4>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">MACHINE & DEEP LEARNING</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">PyTorch</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">TensorFlow</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Model Training</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">Optimization</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group" style="margin-bottom: 1.5rem;">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">COMPUTER VISION & NLP</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Object Detection</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Computer Vision</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">Text Analysis</span>
+              </div>
+              <div class="skill-tag accent-magenta hover-target">
+                <span class="tag-dot magenta"></span>
+                <span class="tag-name">NLP & LLMs</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="skills-category-group">
+            <div class="skills-category-title space-mono" style="font-size: 0.7rem; color: var(--color-text-muted); margin-bottom: 0.5rem;">AI INTEGRATION & AGENTS</div>
+            <div class="skills-tags">
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">LLM APIs</span>
+              </div>
+              <div class="skill-tag accent-lime hover-target">
+                <span class="tag-dot lime"></span>
+                <span class="tag-name">AI Agents</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Projects (Ecosystem) -->
+    <section id="projects" class="section projects-section">
+      <div class="section-header">
+        <div class="section-title-wrapper">
+          <span class="section-hud-label space-mono glow-magenta">[ 02 // WORK.ECOSYSTEM ]</span>
+          <h2 class="section-title"><span class="reveal-clip" data-en="SELECTED PROJECTS" data-vi="DỰ ÁN TIÊU BIỂU">SELECTED PROJECTS</span></h2>
+        </div>
+        <div class="section-header-line"></div>
+      </div>
+      
+      <p class="section-subtitle reveal-fade-up" data-en="A showcase of enterprise application systems, data integration pipelines, and high-performance automation gateways." data-vi="Tuyển tập các hệ thống ứng dụng doanh nghiệp, luồng tích hợp dữ liệu lớn và cổng tự động hóa hiệu năng cao.">A showcase of enterprise application systems, data integration pipelines, and high-performance automation gateways.</p>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card hover-target reveal-fade-up">
+          <div class="project-shine"></div>
+          <div class="project-header">
+            <span class="project-category space-mono">BACKEND / ARCHITECTURE</span>
+            <div class="project-status-dot glow-lime"></div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">ENTERPRISE BANKING MICROSERVICES</h3>
+            <p class="project-text" data-en="A distributed core banking system designed with Spring Boot and .NET Core microservices, achieving high availability and secure JWT/OAuth2 transaction gates." data-vi="Hệ thống ngân hàng lõi phân tán xây dựng trên kiến trúc microservices với Spring Boot và .NET Core, đạt độ sẵn sàng cao và bảo mật giao dịch qua JWT/OAuth2.">
+              A distributed core banking system designed with Spring Boot and .NET Core microservices, achieving high availability and secure JWT/OAuth2 transaction gates.
+            </p>
+          </div>
+          <div class="project-footer">
+            <div class="project-tags space-mono">
+              <span>.NET CORE</span>
+              <span>JAVA</span>
+              <span>MICROSERVICES</span>
+              <span>SECURITY</span>
+            </div>
+            <a href="https://github.com" target="_blank" class="project-link" aria-label="View Project Source">
+              <svg class="link-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card hover-target reveal-fade-up">
+          <div class="project-shine"></div>
+          <div class="project-header">
+            <span class="project-category space-mono">DATA ENGINEERING / BI</span>
+            <div class="project-status-dot glow-magenta"></div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">REAL-TIME DATA WAREHOUSE PIPELINE</h3>
+            <p class="project-text" data-en="Engineered automated ETL pipelines streaming data into a central corporate Data Lake, providing real-time BI analytics and dashboards via Power BI." data-vi="Xây dựng luồng dữ liệu ETL tự động chuyển đổi và lưu trữ vào Data Lake tập trung, cung cấp các báo cáo phân tích thời gian thực qua Power BI.">
+              Engineered automated ETL pipelines streaming data into a central corporate Data Lake, providing real-time BI analytics and dashboards via Power BI.
+            </p>
+          </div>
+          <div class="project-footer">
+            <div class="project-tags space-mono">
+              <span>ETL PIPELINE</span>
+              <span>DATA LAKE</span>
+              <span>POWER BI</span>
+              <span>ORACLE</span>
+            </div>
+            <a href="https://github.com" target="_blank" class="project-link" aria-label="View Project Source">
+              <svg class="link-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card hover-target reveal-fade-up">
+          <div class="project-shine"></div>
+          <div class="project-header">
+            <span class="project-category space-mono">DEVOPS / INFRASTRUCTURE</span>
+            <div class="project-status-dot glow-lime"></div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">DEVOPS CI/CD CLOUD GATEWAY</h3>
+            <p class="project-text" data-en="High-performance deployment automation using Docker containers and OpenShift clusters on Kubernetes, utilizing GitLab CI for zero-downtime updates." data-vi="Tự động hóa triển khai hiệu năng cao sử dụng container Docker và OpenShift trên cụm Kubernetes, tích hợp GitLab CI để cập nhật không gián đoạn.">
+              High-performance deployment automation using Docker containers and OpenShift clusters on Kubernetes, utilizing GitLab CI for zero-downtime updates.
+            </p>
+          </div>
+          <div class="project-footer">
+            <div class="project-tags space-mono">
+              <span>DOCKER</span>
+              <span>KUBERNETES</span>
+              <span>OPENSHIFT</span>
+              <span>CI/CD</span>
+            </div>
+            <a href="https://github.com" target="_blank" class="project-link" aria-label="View Project Source">
+              <svg class="link-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card hover-target reveal-fade-up">
+          <div class="project-shine"></div>
+          <div class="project-header">
+            <span class="project-category space-mono">FRONTEND CLIENT</span>
+            <div class="project-status-dot glow-cyan"></div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">FINANCIAL LENDING INTERFACE</h3>
+            <p class="project-text" data-en="Interactive client lending portal built in Angular utilizing Server-Side Rendering (SSR) for fast page loads and styled with TailwindCSS." data-vi="Cổng thông tin cho vay tài chính tương tác xây dựng bằng Angular sử dụng cơ chế kết xuất phía máy chủ (SSR) giúp tối ưu tốc độ và giao diện TailwindCSS.">
+              Interactive client lending portal built in Angular utilizing Server-Side Rendering (SSR) for fast page loads and styled with TailwindCSS.
+            </p>
+          </div>
+          <div class="project-footer">
+            <div class="project-tags space-mono">
+              <span>ANGULAR SSR</span>
+              <span>TAILWIND CSS</span>
+              <span>BOOSTRAP</span>
+              <span>PERFORMANCE</span>
+            </div>
+            <a href="https://github.com" target="_blank" class="project-link" aria-label="View Project Source">
+              <svg class="link-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Experience (Timeline) -->
+    <section id="experience" class="section experience-section">
+      <div class="section-header">
+        <div class="section-title-wrapper">
+          <span class="section-hud-label space-mono glow-cyan">[ 03 // TIMELINE.LOGS ]</span>
+          <h2 class="section-title"><span class="reveal-clip" data-en="EXPERIENCE TIMELINE" data-vi="HÀNH TRÌNH CHUYÊN MÔN">EXPERIENCE TIMELINE</span></h2>
+        </div>
+        <div class="section-header-line"></div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        
+        <!-- Timeline Item 1 -->
+        <div class="timeline-item">
+          <div class="timeline-dot-wrapper">
+            <div class="timeline-dot glow-lime"></div>
+          </div>
+          <div class="timeline-card hover-target reveal-fade-up">
+            <div class="timeline-meta space-mono">
+              <span class="timeline-year">2025 — PRESENT</span>
+              <span class="timeline-org" data-en="UNIVERSITY & ENTERPRISE DEVOPS" data-vi="ĐẠI HỌC VÀ PHÁT TRIỂN DOANH NGHIỆP">ĐẠI HỌC VÀ PHÁT TRIỂN DOANH NGHIỆP</span>
+            </div>
+            <h3 class="timeline-title" data-en="AI Student & Enterprise Developer" data-vi="Sinh viên & Lập trình viên AI doanh nghiệp">Sinh viên & Lập trình viên AI doanh nghiệp</h3>
+            <p class="timeline-desc" data-en="Pursuing a university degree in Artificial Intelligence while working in software development for enterprise automation. Designing, implementing, and integrating AI models, full-stack microservices, and databases in dynamic business environments." data-vi="Theo học đại học chuyên ngành Trí tuệ Nhân tạo kết hợp làm việc thực tế tại doanh nghiệp. Thiết kế, tích hợp các giải pháp AI, sản phẩm phần mềm full-stack và hệ thống cơ sở dữ liệu trong môi trường doanh nghiệp năng động.">
+              Pursuing a university degree in Artificial Intelligence while working in software development for enterprise automation. Designing, implementing, and integrating AI models, full-stack microservices, and databases in dynamic business environments.
+            </p>
+          </div>
+        </div>
+
+        <!-- Timeline Item 2 -->
+        <div class="timeline-item">
+          <div class="timeline-dot-wrapper">
+            <div class="timeline-dot glow-magenta"></div>
+          </div>
+          <div class="timeline-card hover-target reveal-fade-up">
+            <div class="timeline-meta space-mono">
+              <span class="timeline-year">2022 — 2025</span>
+              <span class="timeline-org" data-en="HIGH SCHOOL & AI FOUNDATIONS" data-vi="HỌC SINH VÀ NỀN TẢNG CÔNG NGHỆ">HỌC SINH VÀ NỀN TẢNG CÔNG NGHỆ</span>
+            </div>
+            <h3 class="timeline-title" data-en="AI Student (High School) & Tech Enthusiast" data-vi="Học sinh đam mê Tin học & AI">Học sinh đam mê Tin học & AI</h3>
+            <p class="timeline-desc" data-en="Dedicated high school student researching advanced technology and artificial intelligence foundations. Self-studied algorithm logic, machine learning, neural networks, and built basic web applications using Python, JavaScript, and databases." data-vi="Học sinh THPT tập trung nghiên cứu nền tảng công nghệ và trí tuệ nhân tạo. Tự học tư duy thuật toán, mô hình học máy, mạng nơ-ron cơ bản, và xây dựng các ứng dụng web sơ khởi bằng Python, JavaScript và cơ sở dữ liệu.">
+              Dedicated high school student researching advanced technology and artificial intelligence foundations. Self-studied algorithm logic, machine learning, neural networks, and built basic web applications using Python, JavaScript, and databases.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Contact -->
+    <section id="contact" class="section contact-section">
+      <div class="section-header">
+        <div class="section-title-wrapper">
+          <span class="section-hud-label space-mono glow-lime">[ 04 // CONNECT.PORTAL ]</span>
+          <h2 class="section-title"><span class="reveal-clip" data-en="GET IN TOUCH" data-vi="KẾT NỐI LIÊN HỆ">GET IN TOUCH</span></h2>
+        </div>
+        <div class="section-header-line"></div>
+      </div>
+
+      <div class="contact-grid">
+        <div class="contact-left reveal-fade-up">
+          <h3 class="contact-callout" data-en="Ready to build the future? Connect the gateway." data-vi="Sẵn sàng xây dựng tương lai? Hãy kết nối cổng giao tiếp.">Ready to build the future? Connect the gateway.</h3>
+          <p class="contact-description" data-en="Feel free to reach out for project collaboration, technical consultancy, or just to chat about experiential web design and Web3 creative concepts." data-vi="Vui lòng liên hệ để hợp tác dự án, tư vấn kỹ thuật hoặc chỉ đơn giản là trò chuyện về thiết kế web trải nghiệm và các khái niệm sáng tạo Web3.">
+            Feel free to reach out for project collaboration, technical consultancy, or just to chat about experiential web design and Web3 creative concepts.
+          </p>
+          
+          <div class="contact-details space-mono">
+            <div class="detail-row">
+              <span class="detail-label">EMAIL:</span>
+              <a href="mailto:name@example.com" class="detail-value hover-target">namhoai.dev@gmail.com</a>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">TELEGRAM:</span>
+              <a href="https://t.me/" target="_blank" class="detail-value hover-target">@namhoai_dev</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-right reveal-fade-up">
+          <!-- Glassmorphic Form -->
+          <form class="contact-form" id="contact-form">
+            <div class="form-row">
+              <div class="input-group">
+                <label for="name" class="space-mono" data-en="Your Name" data-vi="Họ và tên">Your Name</label>
+                <input type="text" id="name" required placeholder="John Doe" class="hover-target">
+                <span class="input-line"></span>
+              </div>
+              <div class="input-group">
+                <label for="email" class="space-mono" data-en="Your Email" data-vi="Địa chỉ Email">Your Email</label>
+                <input type="email" id="email" required placeholder="john@example.com" class="hover-target">
+                <span class="input-line"></span>
+              </div>
+            </div>
+            
+            <div class="input-group">
+              <label for="message" class="space-mono" data-en="Your Message" data-vi="Lời nhắn gửi">Your Message</label>
+              <textarea id="message" required placeholder="Type your message here..." rows="5" class="hover-target"></textarea>
+              <span class="input-line"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary hover-target" data-en="SEND MESSAGE" data-vi="GỬI TIN NHẮN">SEND MESSAGE</button>
+            <div id="form-feedback" class="form-feedback space-mono"></div>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-divider"></div>
+      <div class="footer-content">
+        <div class="footer-copyright space-mono">
+          <span>© 2026 NAM HOAI. ALL RIGHTS RESERVED.</span>
+        </div>
+      </div>
+    </footer>
+
+  <!-- Interactive Tech Stack Details Modal Popup (Hatom.com Glassmorphism Style) -->
+  <div id="tech-modal" class="tech-modal" style="display: none;">
+    <div class="tech-modal-overlay"></div>
+    <div class="tech-modal-card">
+      <button class="tech-modal-close space-mono hover-target" aria-label="Close Modal">×</button>
+      <div class="tech-modal-header">
+        <span class="tech-modal-hud-label space-mono" id="tech-modal-hud-label">[ SYSTEM_CORE // TECH_SPEC ]</span>
+        <h3 class="tech-modal-title" id="tech-modal-title">TECHNOLOGY NAME</h3>
+      </div>
+      <div class="tech-modal-body">
+        <p class="tech-modal-description" id="tech-modal-description">
+          Detailed explanation of how Nam Hoai applies this technology in enterprise software systems.
+        </p>
+        <div class="tech-modal-meta-grid">
+          <div class="meta-row">
+            <span class="meta-label space-mono">CATEGORY:</span>
+            <span class="meta-value space-mono" id="tech-modal-category">DEVELOPMENT</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label space-mono">EXPERTISE:</span>
+            <span class="meta-value space-mono glow-lime" id="tech-modal-expertise">ENTERPRISE SYSTEM</span>
+          </div>
+        </div>
+      </div>
+      <div class="tech-modal-footer">
+        <a id="tech-modal-doc-link" href="#" target="_blank" class="btn btn-secondary tech-modal-btn hover-target">
+          <span class="btn-text space-mono" data-en="LEARN DOCS" data-vi="CÁCH SỬ DỤNG">LEARN DOCS</span>
+        </a>
+        <a id="tech-modal-download-link" href="#" target="_blank" class="btn btn-primary tech-modal-btn hover-target">
+          <span class="btn-text space-mono" data-en="OFFICIAL SITE" data-vi="TRANG CHỦ / TẢI VỀ">OFFICIAL SITE</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating AI Chat Assistant (Hatom.com Glassmorphic HUD Style) -->
+  <div id="ai-chat-container" class="ai-chat-container">
+    <!-- Trigger Floating Action Button (FAB) -->
+    <button id="ai-chat-trigger" class="ai-chat-trigger hover-target" aria-label="Ask AI Assistant">
+      <div class="ai-chat-pulse"></div>
+      <svg class="ai-chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span class="ai-chat-trigger-text space-mono" data-en="ASK AI" data-vi="HỎI AI">ASK AI</span>
+    </button>
+
+    <!-- Glassmorphic Chat Window -->
+    <div id="ai-chat-window" class="ai-chat-window" style="display: none;">
+      <div class="ai-chat-header">
+        <div class="ai-chat-header-title">
+          <span class="ai-chat-hud-title space-mono">[ COGNITIVE.SYS ]</span>
+          <h4 class="ai-chat-title space-mono">AI ASSISTANT</h4>
+        </div>
+        <div class="ai-chat-header-controls">
+          <div class="ai-chat-status">
+            <span class="ai-chat-status-dot glow-lime"></span>
+            <span class="ai-chat-status-text space-mono">ONLINE</span>
+          </div>
+          <button id="ai-chat-close" class="ai-chat-close space-mono hover-target" aria-label="Close Chat">×</button>
+        </div>
+      </div>
+      
+      <div class="ai-chat-body">
+        <div class="ai-chat-messages" id="ai-chat-messages">
+          <!-- Initial bot greeting -->
+          <div class="ai-message bot-message">
+            <div class="ai-message-meta space-mono">BOT // SYSTEM_ONLINE</div>
+            <div class="ai-message-content" data-en="Hello! I am Nam Hoai's AI Assistant. How can I help you explore his skills, experience, or projects today?" data-vi="Xin chào! Tôi là Trợ lý AI của anh Nam Hoài. Tôi có thể giúp gì cho bạn trong việc tìm hiểu kỹ năng, kinh nghiệm hoặc dự án của anh ấy hôm nay?">
+              Hello! I am Nam Hoai's AI Assistant. How can I help you explore his skills, experience, or projects today?
+            </div>
+          </div>
+        </div>
+        
+        <!-- Suggestions Chips -->
+        <div class="ai-chat-suggestions" id="ai-chat-suggestions">
+          <button type="button" class="ai-suggestion-chip hover-target" data-en="Who is Nam Hoai?" data-vi="Nam Hoài là ai?">Who is Nam Hoai?</button>
+          <button type="button" class="ai-suggestion-chip hover-target" data-en="What are his AI skills?" data-vi="Kỹ năng AI nổi bật?">What are his AI skills?</button>
+          <button type="button" class="ai-suggestion-chip hover-target" data-en="View his projects" data-vi="Xem các dự án nổi bật">View his projects</button>
+          <button type="button" class="ai-suggestion-chip hover-target" data-en="How to contact him?" data-vi="Cách liên hệ nhanh?">How to contact him?</button>
+        </div>
+      </div>
+      
+      <form id="ai-chat-form" class="ai-chat-footer">
+        <input type="text" id="ai-chat-input" class="ai-chat-input space-mono" placeholder="Type message... / Nhập tin nhắn..." autocomplete="off" required>
+        <button type="submit" id="ai-chat-send" class="ai-chat-send hover-target" aria-label="Send Message">
+          <svg class="send-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="main.js?v=20"></script>
+</body>
+</html>
