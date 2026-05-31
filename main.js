@@ -26,10 +26,25 @@ try {
   console.warn("localStorage is not accessible:", e);
 }
 
-// Global Tab Inactivity Monitor
+// Global Tab Inactivity Monitor & Animation Frame Handles
 let isTabActive = true;
+let cursorAnimId = null;
+let glowsAnimId = null;
+let threeAnimId = null;
+
 document.addEventListener('visibilitychange', () => {
   isTabActive = !document.hidden;
+  if (isTabActive) {
+    // Resume loops if they are not active
+    if (!cursorAnimId && window.innerWidth >= 1024) cursorAnimId = requestAnimationFrame(updateCursor);
+    if (!glowsAnimId && window.innerWidth >= 768) glowsAnimId = requestAnimationFrame(updateGlows);
+    if (!threeAnimId && typeof THREE !== 'undefined' && renderer && scene) threeAnimId = requestAnimationFrame(animateThreeBg);
+  } else {
+    // Cancel all animation frames to achieve 0.0% background CPU consumption
+    if (cursorAnimId) { cancelAnimationFrame(cursorAnimId); cursorAnimId = null; }
+    if (glowsAnimId) { cancelAnimationFrame(glowsAnimId); glowsAnimId = null; }
+    if (threeAnimId) { cancelAnimationFrame(threeAnimId); threeAnimId = null; }
+  }
 });
 
 /* -------------------------------------------------------------
@@ -353,7 +368,7 @@ window.addEventListener('mousemove', (e) => {
 
 function updateCursor() {
   if (!isTabActive || window.innerWidth < 1024) {
-    requestAnimationFrame(updateCursor);
+    cursorAnimId = null;
     return;
   }
   // Lerp equation: current = current + (target - current) * factor
@@ -369,13 +384,13 @@ function updateCursor() {
   cursorCircle.style.left = `${circX}px`;
   cursorCircle.style.top = `${circY}px`;
   
-  requestAnimationFrame(updateCursor);
+  cursorAnimId = requestAnimationFrame(updateCursor);
 }
-requestAnimationFrame(updateCursor);
+cursorAnimId = requestAnimationFrame(updateCursor);
 
 function updateGlows() {
   if (!isTabActive || window.innerWidth < 768) {
-    requestAnimationFrame(updateGlows);
+    glowsAnimId = null;
     return;
   }
   glowX1 += (targetGlowX1 - glowX1) * 0.035; // Soft fluid drift
@@ -387,16 +402,14 @@ function updateGlows() {
   glowX3 += (targetGlowX3 - glowX3) * 0.02; // Slower differential motion
   glowY3 += (targetGlowY3 - glowY3) * 0.02;
   
-  document.documentElement.style.setProperty('--glow-x1', `${glowX1}px`);
-  document.documentElement.style.setProperty('--glow-y1', `${glowY1}px`);
-  document.documentElement.style.setProperty('--glow-x2', `${glowX2}px`);
-  document.documentElement.style.setProperty('--glow-y2', `${glowY2}px`);
-  document.documentElement.style.setProperty('--glow-x3', `${glowX3}px`);
-  document.documentElement.style.setProperty('--glow-y3', `${glowY3}px`);
+  // Directly move elements using hardware-accelerated GPU translate3d (Eliminates CSS variable layout reflows!)
+  if (glow1) glow1.style.transform = `translate3d(${glowX1 - 400}px, ${glowY1 - 400}px, 0)`;
+  if (glow2) glow2.style.transform = `translate3d(${glowX2 - 450}px, ${glowY2 - 450}px, 0)`;
+  if (glow3) glow3.style.transform = `translate3d(${glowX3 - 425}px, ${glowY3 - 425}px, 0)`;
   
-  requestAnimationFrame(updateGlows);
+  glowsAnimId = requestAnimationFrame(updateGlows);
 }
-requestAnimationFrame(updateGlows);
+glowsAnimId = requestAnimationFrame(updateGlows);
 
 // Add Click interactions to Cursor
 window.addEventListener('mousedown', () => cursor.classList.add('clicked'));
@@ -431,6 +444,10 @@ observer.observe(document.body, { childList: true, subtree: true });
    THREE.JS 3D WEBGL INTERACTIVE MORPHING BACKGROUND
 ------------------------------------------------------------- */
 const webglCanvas = document.getElementById('webgl-canvas');
+const glow1 = document.querySelector('.glow-blob-1');
+const glow2 = document.querySelector('.glow-blob-2');
+const glow3 = document.querySelector('.glow-blob-3');
+
 let scene, camera, renderer, starfield, ambientLight, dirLight;
 let heroGroup, sphereMesh, sphereWire, ring1, ring2, satellite;
 let aboutMesh, aboutPoints, projectsMesh, contactMesh;
@@ -454,7 +471,7 @@ let particleBurstGroup = null;
 let particleBurstStartTime = 0;
 let particleBurstParticles = [];
 
-const starCount = 2000;
+const starCount = 600;
 
 function createParticleTexture() {
   const canvas = document.createElement('canvas');
@@ -824,7 +841,7 @@ function initThreeBg() {
   }
   
   // 8. Projects mesh (Faceted liquid chrome Torus Knot)
-  const knotGeo = new THREE.TorusKnotGeometry(32, 9, 120, 16);
+  const knotGeo = new THREE.TorusKnotGeometry(32, 8, 80, 12);
   projectsMesh = new THREE.Mesh(knotGeo, projectsMaterial);
   projectsMesh.position.set(window.innerWidth < 768 ? 0 : -50, 0, 0);
   scene.add(projectsMesh);
@@ -859,7 +876,7 @@ function initThreeBg() {
     updateThreeTheme('light');
   }
 
-  animateThreeBg();
+  threeAnimId = requestAnimationFrame(animateThreeBg);
 }
 
 function onWebglResize() {
@@ -888,8 +905,11 @@ function onWebglMouseMove(e) {
 
 function animateThreeBg() {
   if (typeof THREE === 'undefined' || !renderer || !scene) return;
-  requestAnimationFrame(animateThreeBg);
-  if (!isTabActive) return; // Tab chạy ngầm -> Tạm dừng kết xuất WebGL hoàn toàn để tiết kiệm pin!
+  if (!isTabActive) {
+    threeAnimId = null;
+    return;
+  }
+  threeAnimId = requestAnimationFrame(animateThreeBg);
   
   // Smooth WebGL lighting transitions (sáng tối dần)
   if (ambientLight && targetAmbientColor) {

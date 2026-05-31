@@ -278,6 +278,10 @@ p {
   z-index: 0;
   will-change: transform;
   opacity: 0.26; /* Boosted for vibrant blending depth */
+  top: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0); /* Direct GPU layering */
+  backface-visibility: hidden;
 }
 
 .glow-blob-1 {
@@ -285,10 +289,6 @@ p {
   height: 800px;
   background: radial-gradient(circle, rgba(193, 255, 18, 0.45) 0%, rgba(193, 255, 18, 0.05) 55%, transparent 70%);
   filter: blur(140px);
-  /* Follow cursor with smooth delay */
-  top: var(--glow-y1, 20%);
-  left: var(--glow-x1, 20%);
-  transform: translate(-50%, -50%);
 }
 
 .glow-blob-2 {
@@ -296,10 +296,6 @@ p {
   height: 900px;
   background: radial-gradient(circle, rgba(247, 108, 254, 0.38) 0%, rgba(247, 108, 254, 0.05) 55%, transparent 70%);
   filter: blur(160px);
-  /* Drifts slowly in the opposite direction */
-  top: var(--glow-y2, 70%);
-  left: var(--glow-x2, 70%);
-  transform: translate(-50%, -50%);
 }
 
 .glow-blob-3 {
@@ -307,9 +303,6 @@ p {
   height: 850px;
   background: radial-gradient(circle, rgba(0, 240, 255, 0.35) 0%, rgba(0, 240, 255, 0.04) 55%, transparent 70%);
   filter: blur(150px);
-  top: var(--glow-y3, 50%);
-  left: var(--glow-x3, 50%);
-  transform: translate(-50%, -50%);
 }
 
 body::before {
