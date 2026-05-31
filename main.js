@@ -2015,7 +2015,7 @@ function queryLocalIntent(text) {
 
 // Live Gemini API Web Client
 async function callGeminiAPI(userMessage) {
-  const systemPrompt = `You are the professional, friendly, and highly intelligent AI Portfolio Assistant representing Nam Hoai. Nam Hoai's portfolio site domain is: namth.io.vn.
+  const systemPrompt = `You are the professional, friendly, and highly intelligent AI Portfolio Assistant representing Nam Hoai. Nam Hoai's portfolio site domain is: namth.id.vn.
 Here are the official verified facts about Nam Hoai:
 - Role: AI Engineer & Full-Stack Developer based in Hanoi, Vietnam.
 - Core philosophy: Views technology as a medium for cognitive automation.
