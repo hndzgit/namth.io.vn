@@ -26,6 +26,12 @@ try {
   console.warn("localStorage is not accessible:", e);
 }
 
+// Global Tab Inactivity Monitor
+let isTabActive = true;
+document.addEventListener('visibilitychange', () => {
+  isTabActive = !document.hidden;
+});
+
 /* -------------------------------------------------------------
    GEMINI API KEY CONFIGURATION
 ------------------------------------------------------------- */
@@ -346,6 +352,10 @@ window.addEventListener('mousemove', (e) => {
 });
 
 function updateCursor() {
+  if (!isTabActive || window.innerWidth < 1024) {
+    requestAnimationFrame(updateCursor);
+    return;
+  }
   // Lerp equation: current = current + (target - current) * factor
   dotX += (cursorX - dotX) * 0.35;
   dotY += (cursorY - dotY) * 0.35;
@@ -364,6 +374,10 @@ function updateCursor() {
 requestAnimationFrame(updateCursor);
 
 function updateGlows() {
+  if (!isTabActive || window.innerWidth < 768) {
+    requestAnimationFrame(updateGlows);
+    return;
+  }
   glowX1 += (targetGlowX1 - glowX1) * 0.035; // Soft fluid drift
   glowY1 += (targetGlowY1 - glowY1) * 0.035;
   
@@ -881,6 +895,7 @@ function onWebglMouseMove(e) {
 function animateThreeBg() {
   if (typeof THREE === 'undefined' || !renderer || !scene) return;
   requestAnimationFrame(animateThreeBg);
+  if (!isTabActive) return; // Tab chạy ngầm -> Tạm dừng kết xuất WebGL hoàn toàn để tiết kiệm pin!
   
   // Smooth WebGL lighting transitions (sáng tối dần)
   if (ambientLight && targetAmbientColor) {
@@ -904,37 +919,9 @@ function animateThreeBg() {
   lightCyan.position.x = Math.cos(time * 0.4) * 120;
   lightCyan.position.y = Math.sin(time * 0.6) * 120;
   
-  // Constant Starfield Drift
+  // Constant Starfield Drift (Xoay bằng phần cứng GPU - Tiêu hao 0% CPU thay cho vòng lặp 2,000 sao)
   starfield.rotation.y += 0.0003;
-
-  // Starfield Fluid Vector Flow Field
-  const starPositions = starfield.geometry.attributes.position.array;
-  for (let i = 0; i < starCount; i++) {
-    const idx = i * 3;
-    let x = starPositions[idx];
-    let y = starPositions[idx + 1];
-    let z = starPositions[idx + 2];
-    
-    const vx = Math.sin(y * 0.008 + time * 0.18) * 0.12;
-    const vy = Math.cos(x * 0.008 + time * 0.18) * 0.12;
-    const vz = Math.sin(x * 0.008 + y * 0.008 + time * 0.08) * 0.08;
-    
-    x += vx;
-    y += vy;
-    z += vz;
-    
-    if (x > 300) x = -300;
-    if (x < -300) x = 300;
-    if (y > 250) y = -250;
-    if (y < -250) y = 250;
-    if (z > 200) z = -200;
-    if (z < -200) z = 200;
-    
-    starPositions[idx] = x;
-    starPositions[idx + 1] = y;
-    starPositions[idx + 2] = z;
-  }
-  starfield.geometry.attributes.position.needsUpdate = true;
+  starfield.rotation.x += 0.0001;
 
   // Particle Splash Explosion Update
   if (particleBurstGroup) {
@@ -1006,9 +993,9 @@ function animateThreeBg() {
   
   projectsMesh.rotation.y += 0.004;
   projectsMesh.rotation.z += 0.0015;
-
-  // Projects Mesh Liquid Wobble
-  if (projectsMesh && projectsMaterial.opacity > 0.01) {
+ 
+  // Projects Mesh Liquid Wobble (Chỉ chạy khi hiển thị & chạy trên máy tính để tránh nóng điện thoại)
+  if (projectsMesh && projectsMaterial.opacity > 0.01 && window.innerWidth >= 1024) {
     const posAttr = projectsMesh.geometry.attributes.position;
     const orig = projectsMesh.userData.originalPos;
     for (let i = 0; i < posAttr.count; i++) {
@@ -1023,7 +1010,7 @@ function animateThreeBg() {
   
   contactMesh.rotation.y += 0.003;
   contactMesh.rotation.x += 0.0015;
-
+ 
   // Inner crystal core rotation
   if (contactMesh && contactMesh.children.length > 0) {
     const innerDiamond = contactMesh.children[0];
@@ -1031,22 +1018,29 @@ function animateThreeBg() {
     innerDiamond.rotation.x -= 0.003;
   }
   
-  // 1. Plane wave terrain calculations (Sync both meshes and points vertices)
-  const planePos = aboutMesh.geometry.attributes.position;
-  const originalZ = aboutMesh.userData.originalZ;
-  for (let i = 0; i < planePos.count; i++) {
-    const u = planePos.getX(i);
-    const v = planePos.getY(i);
-    const zVal = Math.sin(u * 0.025 + time) * Math.cos(v * 0.025 + time) * 16 + originalZ[i];
-    planePos.setZ(i, zVal);
+  // 1. Plane wave terrain calculations (Chỉ tính toán và cập nhật khi đang cuộn đến phần Giới thiệu để tối ưu pin)
+  if (aboutMesh && aboutMaterial && aboutMaterial.opacity > 0.01) {
+    const planePos = aboutMesh.geometry.attributes.position;
+    const originalZ = aboutMesh.userData.originalZ;
+    for (let i = 0; i < planePos.count; i++) {
+      const u = planePos.getX(i);
+      const v = planePos.getY(i);
+      const zVal = Math.sin(u * 0.025 + time) * Math.cos(v * 0.025 + time) * 16 + originalZ[i];
+      planePos.setZ(i, zVal);
+    }
+    planePos.needsUpdate = true;
+    aboutMesh.rotation.z = time * 0.05;
+    
+    // Keep points geometry in sync
+    aboutPoints.geometry.attributes.position.copy(planePos);
+    aboutPoints.geometry.attributes.position.needsUpdate = true;
+    aboutPoints.rotation.z = aboutMesh.rotation.z;
+  } else if (aboutMesh) {
+    aboutMesh.rotation.z = time * 0.05;
+    if (aboutPoints) aboutPoints.rotation.z = aboutMesh.rotation.z;
   }
-  planePos.needsUpdate = true;
-  aboutMesh.rotation.z = time * 0.05;
   
-  // Keep points geometry in sync
-  aboutPoints.geometry.attributes.position.copy(planePos);
-  aboutPoints.geometry.attributes.position.needsUpdate = true;
-  aboutPoints.rotation.z = aboutMesh.rotation.z;
+  // 2. Opacity interpolations based on scroll progressz;
   
   // 2. Opacity interpolations based on scroll progress
   let opacityHero = 0;
