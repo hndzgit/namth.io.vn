@@ -2103,3 +2103,41 @@ async function handleUserSubmit(userText) {
     appendMessage('bot', fallbackText);
   }
 }
+
+/* -------------------------------------------------------------
+   MOBILE NAVIGATION DRAWER TRIGGER EVENT HANDLING
+------------------------------------------------------------- */
+const menuToggle = document.getElementById('menu-toggle');
+const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+if (menuToggle && mobileNavDrawer) {
+  // Toggle mobile drawer
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuToggle.classList.toggle('open');
+    mobileNavDrawer.classList.toggle('open');
+    document.body.classList.toggle('mobile-menu-open');
+  });
+
+  // Close mobile drawer when clicking a link
+  mobileNavLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('open');
+      mobileNavDrawer.classList.remove('open');
+      document.body.classList.remove('mobile-menu-open');
+    });
+  });
+
+  // Close drawer if clicking outside the drawer
+  document.addEventListener('click', (e) => {
+    if (mobileNavDrawer.classList.contains('open') && 
+        !mobileNavDrawer.contains(e.target) && 
+        !menuToggle.contains(e.target)) {
+      menuToggle.classList.remove('open');
+      mobileNavDrawer.classList.remove('open');
+      document.body.classList.remove('mobile-menu-open');
+    }
+  });
+}
+
