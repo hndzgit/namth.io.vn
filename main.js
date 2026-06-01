@@ -471,6 +471,11 @@ let particleBurstGroup = null;
 let particleBurstStartTime = 0;
 let particleBurstParticles = [];
 
+// Constellation settings
+let constellationLines, constellationPoints;
+let constellationNodes = [];
+const constellationNodeCount = 45; // Sweet spot for performance and visual density
+
 const starCount = 600;
 
 function createParticleTexture() {
@@ -665,10 +670,13 @@ function initThreeBg() {
   dirLight.position.set(0, 10, 10);
   scene.add(dirLight);
   
-  // 3. Background Starfield (Constant Galaxy Backdrop)
+  // 3. Background Starfield (Constant Galaxy Backdrop with Mobile Optimization)
+  const isMobile = window.innerWidth < 768;
+  const currentStarCount = isMobile ? 200 : starCount;
+  
   const starGeometry = new THREE.BufferGeometry();
-  const starPositions = new Float32Array(starCount * 3);
-  const starColors = new Float32Array(starCount * 3);
+  const starPositions = new Float32Array(currentStarCount * 3);
+  const starColors = new Float32Array(currentStarCount * 3);
   
   const colors = [
     new THREE.Color('#c1ff12'), // lime
@@ -677,7 +685,7 @@ function initThreeBg() {
     new THREE.Color('#ffffff')  // white
   ];
   
-  for (let i = 0; i < starCount; i++) {
+  for (let i = 0; i < currentStarCount; i++) {
     starPositions[i * 3] = (Math.random() - 0.5) * 600;
     starPositions[i * 3 + 1] = (Math.random() - 0.5) * 500;
     starPositions[i * 3 + 2] = (Math.random() - 0.5) * 400;
@@ -696,7 +704,7 @@ function initThreeBg() {
   starGeometry.setAttribute('color', new THREE.BufferAttribute(starColors, 3));
   
   const starMaterial = new THREE.PointsMaterial({
-    size: window.innerWidth < 768 ? 1.4 : 0.9,
+    size: isMobile ? 1.4 : 0.9,
     map: createParticleTexture(),
     vertexColors: true,
     transparent: true,
@@ -707,6 +715,94 @@ function initThreeBg() {
   
   starfield = new THREE.Points(starGeometry, starMaterial);
   scene.add(starfield);
+
+  // 3b. Interstellar Nebula Dust Clouds (Creates deep visual space parallax layers)
+  nebulaGroup = new THREE.Group();
+  scene.add(nebulaGroup);
+  
+  const nebulaColors = [
+    { color: '#c1ff12', x: -150, y: 80, z: -180, scale: 280, opacity: 0.05 },  // Lime
+    { color: '#f76cfe', x: 180, y: -100, z: -150, scale: 320, opacity: 0.04 }, // Magenta
+    { color: '#00f0ff', x: -80, y: -120, z: -120, scale: 260, opacity: 0.06 }, // Cyan
+    { color: '#f76cfe', x: 50, y: 150, z: -200, scale: 300, opacity: 0.04 }    // Magenta
+  ];
+  
+  nebulaColors.forEach(cfg => {
+    const tex = createGlowTexture(cfg.color, 1.0);
+    const mat = new THREE.MeshBasicMaterial({
+      map: tex,
+      transparent: true,
+      opacity: cfg.opacity,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+    const geo = new THREE.PlaneGeometry(1, 1);
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(cfg.x, cfg.y, cfg.z);
+    mesh.scale.setScalar(cfg.scale);
+    mesh.userData = { rotSpeed: 0.02 + Math.random() * 0.03 };
+    nebulaGroup.add(mesh);
+    nebulaMeshs.push(mesh);
+  });
+
+  // 3c. Interactive AI Constellation Network (Dynamic connection lines)
+  constellationNodes = [];
+  const nodeCount = isMobile ? 15 : constellationNodeCount;
+  const constGeo = new THREE.BufferGeometry();
+  const constPositions = new Float32Array(nodeCount * 3);
+  
+  for (let i = 0; i < nodeCount; i++) {
+    const x = (Math.random() - 0.5) * 350;
+    const y = (Math.random() - 0.5) * 280;
+    const z = (Math.random() - 0.5) * 250 - 50;
+    
+    constPositions[i * 3] = x;
+    constPositions[i * 3 + 1] = y;
+    constPositions[i * 3 + 2] = z;
+    
+    constellationNodes.push({
+      x: x, y: y, z: z,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      vz: (Math.random() - 0.5) * 0.25
+    });
+  }
+  
+  constGeo.setAttribute('position', new THREE.BufferAttribute(constPositions, 3));
+  
+  const constMat = new THREE.PointsMaterial({
+    size: 2.5,
+    color: 0x00f0ff, // cyan nodes
+    map: createParticleTexture(),
+    transparent: true,
+    opacity: 0.7,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  
+  constellationPoints = new THREE.Points(constGeo, constMat);
+  scene.add(constellationPoints);
+  
+  // Set up LineSegments for connections
+  const lineGeo = new THREE.BufferGeometry();
+  const maxLineVertices = nodeCount * nodeCount * 2;
+  const linePositions = new Float32Array(maxLineVertices * 3);
+  const lineColors = new Float32Array(maxLineVertices * 3);
+  
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+  lineGeo.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
+  
+  const lineMat = new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+    linewidth: 1
+  });
+  
+  constellationLines = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(constellationLines);
 
   // 5. Materials for 3D Geometries (Tối ưu hóa cực cao sang MeshStandardMaterial)
   heroMaterial = new THREE.MeshStandardMaterial({
@@ -937,6 +1033,108 @@ function animateThreeBg() {
   starfield.rotation.y += 0.0003;
   starfield.rotation.x += 0.0001;
 
+  // Rotate nebula layers slowly for organic gaseous drift
+  nebulaMeshs.forEach(mesh => {
+    mesh.rotation.z += mesh.userData.rotSpeed * 0.02;
+  });
+
+  // 1b. Constellation nodes movement & line connections
+  if (constellationPoints && constellationLines) {
+    const pointsAttr = constellationPoints.geometry.attributes.position;
+    const pts = pointsAttr.array;
+    const isMobile = window.innerWidth < 768;
+    const nodeCount = isMobile ? 15 : constellationNodeCount;
+    
+    // Update node positions with velocity
+    for (let i = 0; i < nodeCount; i++) {
+      const node = constellationNodes[i];
+      node.x += node.vx;
+      node.y += node.vy;
+      node.z += node.vz;
+      
+      // Boundaries bounce
+      if (Math.abs(node.x) > 200) node.vx *= -1;
+      if (Math.abs(node.y) > 150) node.vy *= -1;
+      if (node.z > 100 || node.z < -200) node.vz *= -1;
+      
+      pts[i * 3] = node.x;
+      pts[i * 3 + 1] = node.y;
+      pts[i * 3 + 2] = node.z;
+    }
+    pointsAttr.needsUpdate = true;
+    
+    // Re-calculate connection lines
+    const lineAttr = constellationLines.geometry.attributes.position;
+    const linePos = lineAttr.array;
+    const colorAttr = constellationLines.geometry.attributes.color;
+    const lineCol = colorAttr.array;
+    
+    let vertexIdx = 0;
+    const maxDist = 65;
+    
+    // Palette for lines based on which nodes are connecting
+    const colorLime = new THREE.Color('#c1ff12');
+    const colorCyan = new THREE.Color('#00f0ff');
+    const colorMagenta = new THREE.Color('#f76cfe');
+    
+    for (let i = 0; i < nodeCount; i++) {
+      const n1 = constellationNodes[i];
+      for (let j = i + 1; j < nodeCount; j++) {
+        const n2 = constellationNodes[j];
+        
+        const dx = n1.x - n2.x;
+        const dy = n1.y - n2.y;
+        const dz = n1.z - n2.z;
+        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        
+        if (dist < maxDist) {
+          // Draw line segment between n1 and n2
+          linePos[vertexIdx * 3] = n1.x;
+          linePos[vertexIdx * 3 + 1] = n1.y;
+          linePos[vertexIdx * 3 + 2] = n1.z;
+          
+          linePos[(vertexIdx + 1) * 3] = n2.x;
+          linePos[(vertexIdx + 1) * 3 + 1] = n2.y;
+          linePos[(vertexIdx + 1) * 3 + 2] = n2.z;
+          
+          // Interpolate alpha based on proximity
+          const alpha = (1.0 - dist / maxDist) * 0.45 * (isMobile ? 0.3 : 1.0);
+          
+          // Dynamic gradient color along the line based on positions
+          let baseCol = colorCyan;
+          if (n1.x < -50) baseCol = colorLime;
+          else if (n1.x > 50) baseCol = colorMagenta;
+          
+          lineCol[vertexIdx * 3] = baseCol.r * alpha;
+          lineCol[vertexIdx * 3 + 1] = baseCol.g * alpha;
+          lineCol[vertexIdx * 3 + 2] = baseCol.b * alpha;
+          
+          lineCol[(vertexIdx + 1) * 3] = baseCol.r * alpha;
+          lineCol[(vertexIdx + 1) * 3 + 1] = baseCol.g * alpha;
+          lineCol[(vertexIdx + 1) * 3 + 2] = baseCol.b * alpha;
+          
+          vertexIdx += 2;
+        }
+      }
+    }
+    
+    // Reset remaining elements in the line arrays to 0 to prevent ghost lines
+    const totalVertices = linePos.length;
+    for (let k = vertexIdx; k < totalVertices / 2; k++) {
+      linePos[k * 3] = 0;
+      linePos[k * 3 + 1] = 0;
+      linePos[k * 3 + 2] = 0;
+      lineCol[k * 3] = 0;
+      lineCol[k * 3 + 1] = 0;
+      lineCol[k * 3 + 2] = 0;
+    }
+    
+    lineAttr.needsUpdate = true;
+    colorAttr.needsUpdate = true;
+    
+    constellationLines.geometry.setDrawRange(0, vertexIdx);
+  }
+
   // Particle Splash Explosion Update
   if (particleBurstGroup) {
     const elapsed = Date.now() - particleBurstStartTime;
@@ -1091,12 +1289,32 @@ function animateThreeBg() {
   // Apply visual coordinate transformations (slides/scales) as we scroll
   heroGroup.position.y = -scrollPercent * 140;
   
+  // Smoothly scale active objects down to 0.001 when inactive to achieve morphing entry/exit and avoid clipping
+  if (heroGroup && !isEntering) {
+    const targetScale = Math.max(0.001, opacityHero);
+    heroGroup.scale.setScalar(targetScale);
+  }
+  
   const targetAboutY = -90 + (1 - opacityAbout) * -90;
   aboutMesh.position.y += (targetAboutY - aboutMesh.position.y) * 0.1;
   aboutPoints.position.y = aboutMesh.position.y;
   
+  if (aboutMesh) {
+    const targetScale = Math.max(0.001, opacityAbout);
+    aboutMesh.scale.setScalar(targetScale);
+    if (aboutPoints) aboutPoints.scale.setScalar(targetScale);
+  }
+  
   projectsMesh.position.y += ((1 - opacityProjects) * 100 - projectsMesh.position.y) * 0.1;
-  contactMesh.scale.setScalar(0.4 + opacityContact * 0.6);
+  if (projectsMesh) {
+    const targetScale = Math.max(0.001, opacityProjects);
+    projectsMesh.scale.setScalar(targetScale);
+  }
+  
+  if (contactMesh) {
+    const targetScale = Math.max(0.001, opacityContact);
+    contactMesh.scale.setScalar(targetScale * (0.4 + opacityContact * 0.6));
+  }
   
   renderer.render(scene, camera);
 }
