@@ -50,7 +50,7 @@ document.addEventListener('visibilitychange', () => {
 /* -------------------------------------------------------------
    GEMINI API KEY CONFIGURATION
 ------------------------------------------------------------- */
-const GEMINI_API_KEY = "AIzaSyAI7m_vxSo92BEvJZz8gEyd59Y22aTh8I4"; // Paste your official Gemini API key here to unlock live AI chatbot capabilities
+const GEMINI_API_KEY = ""; // Live AI is disabled until a secure server-side proxy is configured
 
 // Apply stored theme immediately on parse to avoid layout flash
 if (currentTheme === 'light') {
@@ -2350,8 +2350,8 @@ async function handleUserSubmit(userText) {
   } else {
     // Standard fallback instructions
     const fallbackText = currentLanguage === 'vi' 
-      ? "Tôi chưa hiểu ý của bạn. (Sau khi bạn dán API Key Gemini của mình vào đầu file main.js, tôi sẽ trả lời trôi chảy mọi câu hỏi sáng tạo!). Hiện tại, bạn có thể thử nhấp vào các gợi ý nhanh bên dưới hoặc hỏi các từ khóa như: 'kỹ năng', 'dự án', 'kinh nghiệm', 'liên hệ' nhé!"
-      : "I'm not sure about that. (Once your Gemini API key is pasted in main.js, I will be able to answer any custom queries dynamically!). For now, try clicking the quick suggestions below or asking about: 'skills', 'projects', 'experience', or 'contact'!";
+      ? "Tôi chưa hiểu ý của bạn. Hiện tại, bạn có thể thử nhấp vào các gợi ý nhanh bên dưới hoặc hỏi các từ khóa như: 'kỹ năng', 'dự án', 'kinh nghiệm', 'liên hệ' nhé!"
+      : "I'm not sure about that. For now, try clicking the quick suggestions below or asking about: 'skills', 'projects', 'experience', or 'contact'!";
     appendMessage('bot', fallbackText);
   }
 }
